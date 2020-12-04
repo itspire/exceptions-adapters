@@ -10,12 +10,12 @@ declare(strict_types=1);
 
 namespace Itspire\Exception\Adapter\Test\Functional\Webservice;
 
-use Itspire\Exception\Adapter\Test\Fixtures\Model\Api\Webservice\ApiWebserviceException;
-use Itspire\Exception\Adapter\Test\Fixtures\Model\Business\Model\ExtendedWebserviceException;
-use Itspire\Exception\Adapter\Test\Fixtures\Webservice\WebserviceExceptionApiAdapter;
+use Itspire\Exception\Adapter\Webservice\WebserviceExceptionApiAdapter;
 use Itspire\Exception\Adapter\Webservice\WebserviceExceptionApiAdapterInterface;
+use Itspire\Exception\Serializer\Model\Api\Webservice\ApiWebserviceException;
 use Itspire\Exception\Serializer\Model\Api\Webservice\ApiWebserviceExceptionInterface;
 use Itspire\Exception\Webservice\Definition\WebserviceExceptionDefinition;
+use Itspire\Exception\Webservice\WebserviceException;
 use Itspire\Exception\Webservice\WebserviceExceptionInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
@@ -55,12 +55,13 @@ class WebserviceExceptionAdapterTest extends TestCase
     {
         parent::setUp();
 
-        $this->businessWebserviceException = new ExtendedWebserviceException(
+        $this->businessWebserviceException = new WebserviceException(
             new WebserviceExceptionDefinition(WebserviceExceptionDefinition::TRANSFORMATION_ERROR),
             []
         );
 
-        $this->apiWebserviceException = (new ApiWebserviceException())
+        $this->apiWebserviceException = new ApiWebserviceException();
+        $this->apiWebserviceException
             ->setCode('TRANSFORMATION_ERROR')
             ->setMessage('A transformation exception occurred');
 
@@ -86,7 +87,7 @@ class WebserviceExceptionAdapterTest extends TestCase
     /** @test */
     public function adaptBusinessToApiWithDetailsTest(): void
     {
-        $this->businessWebserviceException = new ExtendedWebserviceException(
+        $this->businessWebserviceException = new WebserviceException(
             new WebserviceExceptionDefinition(WebserviceExceptionDefinition::TRANSFORMATION_ERROR),
             ['testDetails1', 'testDetails2']
         );

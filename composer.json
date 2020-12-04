@@ -14,10 +14,8 @@
     "require": {
         "php": ">=7.4",
         "doctrine/collections": "~1.6",
-        "itspire/common-adapters": "dev-development",
-        "itspire/exceptions-serializer": "dev-development",
-        "laminas/laminas-diactoros": "~2.5",
-        "psr/http-message": "~1.0",
+        "itspire/common-adapters": "~1.0",
+        "itspire/exceptions-serializer": "~1.0",
         "symfony/translation": "~4.4"
     },
     "autoload": {
@@ -39,7 +37,5 @@
         "psr-4": {
             "Itspire\\Exception\\Adapter\\Test\\": "src/test/php"
         }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }

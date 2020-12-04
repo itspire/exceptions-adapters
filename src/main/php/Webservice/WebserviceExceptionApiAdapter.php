@@ -13,16 +13,31 @@ namespace Itspire\Exception\Adapter\Webservice;
 use Itspire\Exception\Adapter\AbstractExceptionApiAdapter;
 use Itspire\Exception\ExceptionInterface;
 use Itspire\Exception\Serializer\Model\Api\ApiExceptionInterface;
+use Itspire\Exception\Serializer\Model\Api\Webservice\ApiWebserviceException;
 use Itspire\Exception\Serializer\Model\Api\Webservice\ApiWebserviceExceptionInterface;
+use Itspire\Exception\Webservice\Definition\WebserviceExceptionDefinition;
+use Itspire\Exception\Webservice\WebserviceException;
 use Itspire\Exception\Webservice\WebserviceExceptionInterface;
 
-/**
- * @method WebserviceExceptionInterface adaptApiToBusiness(ApiWebserviceExceptionInterface $apiObject)
- * @method ApiWebserviceExceptionInterface adaptBusinessToApi(WebserviceExceptionInterface $businessObject)
- */
-abstract class AbstractWebserviceExceptionApiAdapter extends AbstractExceptionApiAdapter implements
+class WebserviceExceptionApiAdapter extends AbstractExceptionApiAdapter implements
     WebserviceExceptionApiAdapterInterface
 {
+    public function getApiClass(): string
+    {
+        return ApiWebserviceException::class;
+    }
+
+    public function getBusinessClass(): string
+    {
+        return WebserviceException::class;
+    }
+
+    /** @return string Fully qualified Exception Definition class name */
+    protected function getExceptionDefinitionClass(): string
+    {
+        return WebserviceExceptionDefinition::class;
+    }
+
     /**
      * @param ApiWebserviceExceptionInterface $apiException
      * @param WebserviceExceptionInterface $businessException

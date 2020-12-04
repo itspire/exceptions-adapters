@@ -10,14 +10,15 @@ declare(strict_types=1);
 
 namespace Itspire\Exception\Adapter\Test\Unit\Webservice;
 
-use Itspire\Exception\Adapter\Test\Fixtures\Model\Api\Webservice\ApiWebserviceException;
-use Itspire\Exception\Adapter\Test\Fixtures\Model\Api\Webservice\DummyApiWebserviceException;
-use Itspire\Exception\Adapter\Test\Fixtures\Model\Business\Model\DummyException;
-use Itspire\Exception\Adapter\Test\Fixtures\Model\Business\Model\ExtendedWebserviceException;
-use Itspire\Exception\Adapter\Test\Fixtures\Webservice\WebserviceExceptionApiAdapter;
+use Itspire\Exception\Adapter\Webservice\WebserviceExceptionApiAdapter;
 use Itspire\Exception\Adapter\Webservice\WebserviceExceptionApiAdapterInterface;
+use Itspire\Exception\Http\Definition\HttpExceptionDefinition;
+use Itspire\Exception\Http\HttpException;
+use Itspire\Exception\Serializer\Model\Api\ApiException;
+use Itspire\Exception\Serializer\Model\Api\Webservice\ApiWebserviceException;
 use Itspire\Exception\Serializer\Model\Api\Webservice\ApiWebserviceExceptionInterface;
 use Itspire\Exception\Webservice\Definition\WebserviceExceptionDefinition;
+use Itspire\Exception\Webservice\WebserviceException;
 use Itspire\Exception\Webservice\WebserviceExceptionInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -35,12 +36,13 @@ class WebserviceExceptionAdapterTest extends TestCase
     {
         parent::setUp();
 
-        $this->businessWebserviceException = new ExtendedWebserviceException(
+        $this->businessWebserviceException = new WebserviceException(
             new WebserviceExceptionDefinition(WebserviceExceptionDefinition::TRANSFORMATION_ERROR),
             []
         );
 
-        $this->apiWebserviceException = (new ApiWebserviceException())
+        $this->apiWebserviceException = new ApiWebserviceException();
+        $this->apiWebserviceException
             ->setCode('TRANSFORMATION_ERROR')
             ->setMessage('A transformation exception occurred');
 
@@ -66,11 +68,11 @@ class WebserviceExceptionAdapterTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            sprintf('Adapter %s does not support %s class', WebserviceExceptionApiAdapter::class, DummyException::class)
+            sprintf('Adapter %s does not support %s class', WebserviceExceptionApiAdapter::class, HttpException::class)
         );
 
         $this->webserviceExceptionAdapter->adaptBusinessToApi(
-            new DummyException(new WebserviceExceptionDefinition(WebserviceExceptionDefinition::TRANSFORMATION_ERROR))
+            new HttpException(new HttpExceptionDefinition(HttpExceptionDefinition::HTTP_LOCKED))
         );
     }
 
@@ -92,7 +94,7 @@ class WebserviceExceptionAdapterTest extends TestCase
     /** @test */
     public function adaptBusinessToApiWithDetailsTest(): void
     {
-        $this->businessWebserviceException = new ExtendedWebserviceException(
+        $this->businessWebserviceException = new WebserviceException(
             new WebserviceExceptionDefinition(WebserviceExceptionDefinition::TRANSFORMATION_ERROR),
             ['testDetails1', 'testDetails2']
         );
@@ -131,11 +133,11 @@ class WebserviceExceptionAdapterTest extends TestCase
             sprintf(
                 'Adapter %s does not support %s class',
                 WebserviceExceptionApiAdapter::class,
-                DummyApiWebserviceException::class
+                ApiException::class
             )
         );
 
-        $this->webserviceExceptionAdapter->adaptApiToBusiness(new DummyApiWebserviceException());
+        $this->webserviceExceptionAdapter->adaptApiToBusiness(new ApiException());
     }
 
     /** @test */
