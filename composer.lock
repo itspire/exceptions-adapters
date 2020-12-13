@@ -329,11 +329,11 @@
         },
         {
             "name": "itspire/common-adapters",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.itspire.fr:itspire/common-adapters.git",
-                "reference": "ae775abb83fcb6b329a9d19ffed4b855aa9d90df"
+                "reference": "07cb4855721e4e1d50775c41562b297feb03a5af"
             },
             "require": {
                 "doctrine/collections": "~1.6",
@@ -374,7 +374,7 @@
                 "common",
                 "itspire"
             ],
-            "time": "2020-11-27T21:39:30+00:00"
+            "time": "2020-12-13T23:54:14+00:00"
         },
         {
             "name": "itspire/common-serializer",
